@@ -51,3 +51,58 @@ Day 1 focused on understanding the basic **RTL design flow**, starting with Veri
 The complete Day 1 experiment, including commands, explanations, screenshots, synthesis results, and observations:
 
 ➡️ [Day 1 – RTL Design, Simulation & Synthesis](./DAY_1/README.md)
+## 🛠 Tools Used
+
+- Verilog
+- Icarus Verilog (iverilog)
+- GTKWave
+- Yosys
+- Linux / Ubuntu
+- Git & GitHub
+
+---
+# Day 2 – Timing Libraries, Synthesis & Flip-Flop RTL
+
+Day 2 focused on understanding **technology libraries, timing information, hierarchical and flattened synthesis, and flip-flop RTL coding styles**.
+
+### Topics Covered
+
+- SKY130 technology library
+- Understanding `.lib` timing libraries
+- Process, voltage and temperature conditions
+- Hierarchical synthesis
+- Flattened synthesis
+- Comparison of hierarchical and flattened synthesis
+- Asynchronous reset D flip-flop
+- Asynchronous set D flip-flop
+- Synchronous reset D flip-flop
+- Icarus Verilog simulation
+- GTKWave waveform analysis
+- Yosys synthesis
+- `dfflibmap` for flip-flop mapping
+- Technology mapping using `abc`
+- Gate-level representation
+
+---
+
+## 🔗 Day 2 Documentation
+
+The complete Day 2 experiment, including commands, explanations, screenshots, simulation results, synthesis results, and observations:
+
+➡️ [Day 2 – Timing Libraries, Synthesis & Flip-Flop RTL](./DAY_2/README.md)
+
+---
+
+## 🛠 Tools Used
+
+- Verilog
+- Icarus Verilog (iverilog)
+- GTKWave
+- Yosys
+- SKY130 Standard Cell Library
+- Linux / Ubuntu
+- Git & GitHub
+---
+## 👩‍💻 Author
+
+AISHWARYA NOMULA
