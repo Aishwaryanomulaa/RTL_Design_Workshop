@@ -57,7 +57,7 @@ This allows the available standard cells and their timing information to be insp
 
 ### 📷 SKY130 `.lib` File
 
-![SKY130 Library](https://github.com/user-attachments/assets/7bf75f62-4888-4244-90fb-07d948804610)
+![SKY130 Library](images/sky130_lib.png)
 
 The library file contains descriptions of the available cells and their characteristics. This information is used by synthesis tools when converting RTL into technology-specific hardware.
 
@@ -85,7 +85,7 @@ This approach preserves the organization of the original RTL design and makes in
 
 ### 📷 Hierarchical Synthesis
 
-![Hierarchical Synthesis](https://github.com/user-attachments/assets/46b3f459-8efa-4149-8ac2-36d6915c6fe4)
+![Hierarchical Synthesis](images/hierarchical_synthesis.png)
 
 The synthesized representation shows that the module hierarchy is maintained rather than combining all logic into one flat structure.
 
@@ -105,7 +105,7 @@ Flattening gives the synthesis tool greater freedom to optimize logic across mod
 
 ### 📷 Flattened Synthesis
 
-![Flattened Synthesis](https://github.com/user-attachments/assets/83b31d8b-c046-4b55-8d50-74a3b9e85dab)
+![Flattened Synthesis](images/flattened_synthesis.png)
 
 The synthesized representation shows the modules combined into a single-level design.
 
@@ -277,7 +277,7 @@ gtkwave tb_dff_asyncres.vcd
 
 ### 📷 Simulation Result
 
-![Asynchronous Reset Waveform](https://github.com/user-attachments/assets/e971737d-85bb-4b78-983a-27dd0c5a2af4)
+![Asynchronous Reset Waveform](images/async_reset_waveform.png)
 
 The waveform shows the relationship between the clock, reset, input data and flip-flop output.
 
@@ -352,7 +352,7 @@ After synthesis and technology mapping, the RTL flip-flop is represented using c
 
 ### 📷 Synthesized Gate-Level Circuit
 
-![Gate-Level Representation](https://github.com/user-attachments/assets/b6aefb1f-9c47-4dcb-8233-5bf461664823)
+![Gate-Level Representation](images/async_reset_gate.png)
 
 The synthesized circuit demonstrates how the RTL flip-flop is converted into a technology-specific gate-level implementation.
 
