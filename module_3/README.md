@@ -64,8 +64,6 @@ SKY130 Standard Cells
 Gate-Level Circuit
 ```
 
-Optimization helps reduce unnecessary hardware and can improve the overall implementation of a digital circuit.
-
 ---
 
 # 2. Combinational Logic Optimization
@@ -95,11 +93,9 @@ y
 
 ### Synthesized Circuit
 
-![AND logic](images/opt_check1.png)
+![AND Logic](<images/opt_check.png>)
 
 The synthesized result shows the logic being implemented using a SKY130 AND standard cell.
-
-This demonstrates how an RTL Boolean expression is mapped to a technology-specific cell during synthesis.
 
 ---
 
@@ -109,11 +105,9 @@ The second experiment examined a two-input OR operation.
 
 ### Synthesized Circuit
 
-![OR logic](images/opt_check2.png)
+![OR Logic](<images/opt_check2.png>)
 
 The synthesized circuit uses a SKY130 OR standard cell to implement the required Boolean function.
-
-This shows the conversion from the RTL description to a gate-level technology-mapped representation.
 
 ---
 
@@ -129,11 +123,9 @@ c
 
 ### Synthesized Circuit
 
-![Three input AND](images/opt_check3.png)
+![Three Input AND Logic](<images/opt_check3.png>)
 
-The synthesized circuit contains a SKY130 three-input AND cell.
-
-This demonstrates how the synthesis tool identifies the required logic function and maps it to an available standard cell.
+The synthesized circuit contains the required SKY130 technology-mapped logic.
 
 ---
 
@@ -143,11 +135,11 @@ Another experiment involved XNOR logic and a signal that became constant during 
 
 ### Synthesized Circuit
 
-![XNOR logic](images/opt_check4.png)
+![XNOR Logic](<images/opt_check4.png>)
 
-The synthesized circuit contains a SKY130 XNOR cell.
+The synthesized circuit demonstrates how the RTL logic is mapped to technology-specific standard cells.
 
-The constant signal demonstrates constant propagation, where the synthesis tool uses a known value to simplify the surrounding logic.
+Constant propagation allows the synthesis tool to use known values to simplify surrounding logic.
 
 ---
 
@@ -167,23 +159,21 @@ A counter design was synthesized to observe its gate-level implementation.
 
 ### Synthesized Counter
 
-![Counter optimization](images/counter_opt.png)
+![Counter Schematic](<images/count_opt(schematic).png>)
 
 The synthesized design contains flip-flops together with combinational logic used for determining the next state.
 
-This experiment helped in understanding how RTL sequential logic is converted into technology-specific hardware.
-
 ---
 
-## 3.2 Modified Counter
+## 3.2 Counter with Three DFFs
 
-A modified counter design was also synthesized.
+A modified counter design containing three D flip-flops was also synthesized.
 
-### Synthesized Modified Counter
+### Synthesized Circuit
 
-![Modified counter](images/counter_opt_modified.png)
+![Counter with Three DFFs](<images/count_opt(schematic)_with 3 dffs.png>)
 
-Comparing different RTL implementations helps show how changes in the RTL structure can influence the resulting synthesized circuit.
+This experiment demonstrates how sequential elements and combinational logic are represented after synthesis.
 
 ---
 
@@ -199,9 +189,9 @@ A simple representation is:
        Clock
          |
          ↓
-    +---------+
+    +----------+
     | Flip-Flop|
-    +---------+
+    +----------+
          |
          ↓
    Unused Signal
@@ -229,49 +219,43 @@ The important signals observed included:
 
 ---
 
-## 5.1 D Flip-Flop with Constant Input
-
-One experiment used a D flip-flop with a constant input condition.
+## 5.1 D Flip-Flop – Constant Case 1
 
 ### Synthesized Circuit
 
-![DFF constant 1](images/dff_const1.png)
+![DFF Constant 1 Schematic](<images/dff(schematic)const1.png>)
 
 ### GTKWave Result
 
-![DFF constant 1 waveform](images/dff_const1_waveform.png)
+![DFF Constant 1 Waveform](<images/dff(tb)waveform.png>)
 
 The waveform was used to observe the relationship between the clock, reset and output.
 
 ---
 
-## 5.2 Second Constant Flip-Flop Case
-
-A second sequential experiment was performed with a constant input condition.
+## 5.2 D Flip-Flop – Constant Case 2
 
 ### Synthesized Circuit
 
-![DFF constant 2](images/dff_const2.png)
+![DFF Constant 2 Schematic](<images/dff(schematic)const2.png>)
 
 ### GTKWave Result
 
-![DFF constant 2 waveform](images/dff_const2_waveform.png)
+![DFF Constant 2 Waveform](<images/dff(tb2)waveform.png>)
 
 The waveform was examined to verify the sequential behavior of the circuit.
 
 ---
 
-## 5.3 Sequential Circuit with Multiple Flip-Flops
-
-A more complex sequential circuit containing multiple flip-flops was also synthesized.
+## 5.3 D Flip-Flop – Constant Case 3
 
 ### Synthesized Circuit
 
-![DFF constant 3](images/dff_const3.png)
+![DFF Constant 3 Schematic](<images/dff(schematic)const3.png>)
 
 ### GTKWave Result
 
-![DFF constant 3 waveform](images/dff_const3_waveform.png)
+![DFF Constant 3 Waveform](<images/dff(tb3)waveform.png>)
 
 The waveform was used to observe the transitions of the sequential signals.
 
@@ -337,12 +321,13 @@ The `show` command was used to generate the synthesized circuit diagrams include
 
 | Experiment | Observation |
 |---|---|
-| AND logic | The RTL AND operation was mapped to a SKY130 AND cell |
-| OR logic | The RTL OR operation was mapped to a SKY130 OR cell |
-| Three-input AND | The logic was mapped to a suitable SKY130 standard cell |
-| XNOR logic | The XNOR function was represented using a SKY130 XNOR cell |
-| Constant signal | Constant propagation simplified part of the logic |
+| AND logic | The RTL AND operation was mapped to a SKY130 standard cell |
+| OR logic | The RTL OR operation was mapped to a SKY130 standard cell |
+| Three-input logic | The logic was synthesized and technology mapped |
+| XNOR logic | The XNOR function was synthesized using SKY130 logic |
+| Constant propagation | Known constant values simplified the logic |
 | Counter | Sequential logic was represented using flip-flops and combinational logic |
+| Three-DFF counter | Multiple flip-flops were used to represent sequential state |
 | Unused output | Unnecessary sequential logic can be removed during optimization |
 | Constant D input | A constant input produces predictable sequential behavior |
 
@@ -352,9 +337,9 @@ The `show` command was used to generate the synthesized circuit diagrams include
 
 Day 3 provided practical understanding of combinational and sequential RTL optimization.
 
-The combinational experiments demonstrated how Boolean operations such as AND, OR, three-input AND and XNOR are converted into SKY130 standard-cell implementations.
+The combinational experiments demonstrated how Boolean operations such as AND, OR and XNOR are converted into technology-specific implementations.
 
-The sequential experiments demonstrated the synthesis of counters and flip-flop based circuits. Constant values and unnecessary logic were also studied as part of the optimization process.
+The sequential experiments demonstrated the synthesis of counters and flip-flop-based circuits. Constant values and unnecessary logic were also studied as part of the optimization process.
 
 The designs were simulated using Icarus Verilog and the resulting waveforms were examined using GTKWave. Yosys was used for synthesis, optimization and visualization of the gate-level circuits.
 
@@ -374,4 +359,4 @@ Technology Mapping
 Gate-Level Representation
 ```
 
-The circuit diagrams and waveform screenshots included in this folder were obtained from my own lab experiments.
+The circuit diagrams and waveform screenshots included in the `images` folder were obtained from the lab experiments performed during Day 3.
