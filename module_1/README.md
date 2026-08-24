@@ -1,123 +1,181 @@
-# Day 1 – Exploring Verilog RTL Design Through Simulation
+# Module 1 – Exploring Verilog RTL Design Through Simulation
 
-## Experiment Objective
+## 🎯 Objective
 
-The objective of this experiment was to understand the fundamentals of Register Transfer Level (RTL) design using **Verilog**. The experiment also focused on learning how to compile and simulate Verilog designs using **Icarus Verilog (iverilog)** and verify the output through waveform analysis in **GTKWave**. A **2-to-1 Multiplexer** was implemented to understand the complete simulation process.
+The objective of Module 1 was to understand the fundamentals of Register Transfer Level (RTL) design using **Verilog**.
 
----
+The module focused on compiling and simulating Verilog designs using **Icarus Verilog**, analyzing simulation waveforms using **GTKWave**, and understanding the RTL-to-netlist synthesis flow using **Yosys**.
 
-## Contents
-
-- [Digital Design Verification](#digital-design-verification)
-- [Simulation Workflow with Icarus Verilog](#2️⃣-simulation-workflow-with-icarus-verilog)
-- [Practical Exercise – Simulating a 2:1 Multiplexer](#3️⃣-practical-exercise--simulating-a-21-multiplexer)
-- [Multiplexer Design Explanation](#4️⃣-multiplexer-design-explanation)
-- [Introduction to Yosys](#5️⃣-introduction-to-yosys)
-- [RTL Design and Synthesis](#6️⃣-rtl-design-and-synthesis)
-- [Understanding the `.lib` File and Cell Flavors](#7️⃣-understanding-the-lib-file-and-cell-flavors)
-- [Launching Yosys and Synthesizing the Good Mux](#8️⃣-launching-yosys-and-synthesizing-the-good-mux)
-- [Synthesis Results and Gate-Level Representation](#9️⃣-synthesis-results-and-gate-level-representation)
-- [Generated Gate-Level Netlist](#🔟-generated-gate-level-netlist)
-- [Conclusion](#1️⃣1️⃣-conclusion)
+A **2-to-1 Multiplexer** was implemented and used to understand the complete flow from RTL design and simulation to synthesis and gate-level representation.
 
 ---
 
-# 1️⃣ Digital Design Verification
+## 📑 Contents
 
-### Simulator
-
-A **simulator** is a software application that executes a Verilog design in a virtual environment to evaluate its behavior. It allows designers to observe how a digital circuit responds to different input conditions and helps identify functional errors before hardware implementation.
-
----
-
-### Design
-
-The **design** is the Verilog module that represents the digital circuit to be implemented. It defines the circuit's logic, specifying how inputs are processed to produce the desired outputs.
-
----
-
-### Testbench
-
-A **testbench** is a dedicated verification module written to test the functionality of a design. It applies different combinations of input signals, monitors the resulting outputs, and helps confirm that the design performs according to its intended behavior.
-
-
-<img width="606" height="285" alt="testbench" src="https://github.com/user-attachments/assets/8f3425fa-8804-4b28-b919-38ae2d3fdfc4" />
+- [1. Digital Design Verification](#1-digital-design-verification)
+- [2. Simulation Workflow with Icarus Verilog](#2-simulation-workflow-with-icarus-verilog)
+- [3. Practical Exercise – 2:1 Multiplexer](#3-practical-exercise--21-multiplexer)
+- [4. Multiplexer Design Explanation](#4-multiplexer-design-explanation)
+- [5. Introduction to Yosys](#5-introduction-to-yosys)
+- [6. RTL Design and Synthesis](#6-rtl-design-and-synthesis)
+- [7. Understanding the `.lib` File and Cell Flavors](#7-understanding-the-lib-file-and-cell-flavors)
+- [8. Yosys Synthesis of the Good Mux](#8-yosys-synthesis-of-the-good-mux)
+- [9. Synthesis Results and Gate-Level Representation](#9-synthesis-results-and-gate-level-representation)
+- [10. Generated Gate-Level Netlist](#10-generated-gate-level-netlist)
+- [11. Conclusion](#11-conclusion)
 
 ---
 
-# 2️⃣ Simulation Workflow with Icarus Verilog
+# 1. Digital Design Verification
 
-**Icarus Verilog (iverilog)** is an open-source Verilog compiler and simulator. It compiles the design and testbench, executes the simulation, and generates a **Value Change Dump (.vcd)** file that can be viewed in **GTKWave**.
+Digital design verification is the process of checking whether a digital circuit behaves according to its intended functionality.
 
-## Simulation Flow
+Three important elements involved in the simulation process are:
+
+- Simulator
+- Design
+- Testbench
+
+---
+
+## 1.1 Simulator
+
+A **simulator** is a software application that executes a Verilog design in a virtual environment.
+
+It allows the designer to observe how a digital circuit responds to different input conditions and helps identify functional errors before hardware implementation.
+
+In this module, **Icarus Verilog** was used as the simulator.
+
+---
+
+## 1.2 Design
+
+The **design** is the Verilog module that represents the digital circuit to be implemented.
+
+It defines the circuit's logic and specifies how inputs are processed to produce the required outputs.
+
+For this experiment, a **2-to-1 Multiplexer** was used as the RTL design.
+
+---
+
+## 1.3 Testbench
+
+A **testbench** is a verification module used to test the functionality of a design.
+
+It applies different combinations of input signals, monitors the resulting outputs and helps verify whether the design performs according to its intended behavior.
+
+The testbench generates the input conditions required to verify the 2-to-1 multiplexer.
+
+---
+
+# 2. Simulation Workflow with Icarus Verilog
+
+**Icarus Verilog (`iverilog`)** is an open-source Verilog compiler and simulator.
+
+It compiles the Verilog design and testbench and executes the simulation. The simulation can generate a **Value Change Dump (`.vcd`)** file containing signal transitions.
+
+The generated VCD file can then be viewed using **GTKWave**.
+
+---
+
+## 2.1 Simulation Flow
+
+The basic simulation flow is:
 
 ```text
-Design File
+Verilog Design
       +
 Testbench
       ↓
-Icarus Verilog (iverilog)
+Icarus Verilog
       ↓
-Generate .vcd File
+Simulation
+      ↓
+VCD Waveform File
       ↓
 GTKWave
+      ↓
+Waveform Analysis
 ```
 
-### Simulation Flow Diagram
-
-<img width="701" height="325" alt="simflow" src="https://github.com/user-attachments/assets/fcc78909-5229-4f89-b4c3-58c8cd441f4f" />
-
+The flow allows the RTL design to be verified before synthesis.
 
 ---
 
-# 3️⃣ Practical Exercise – Simulating a 2:1 Multiplexer
+## 2.2 Installing the Required Tools
 
-## Step 1 – Install Required Tools
+The required simulation tools were installed using:
 
 ```bash
 sudo apt install iverilog
 sudo apt install gtkwave
 ```
 
+`iverilog` is used for compiling and simulating the Verilog design, while `gtkwave` is used for waveform visualization.
+
 ---
 
-## Step 2 – Compile the Design
+# 3. Practical Exercise – 2:1 Multiplexer
+
+A **2-to-1 Multiplexer** was implemented as the practical RTL design.
+
+A multiplexer selects one of multiple input signals and passes the selected signal to the output.
+
+The 2:1 multiplexer contains:
+
+- Two data inputs
+- One select input
+- One output
+
+---
+
+## 3.1 Compiling the Design
+
+The Verilog design and testbench were compiled using:
 
 ```bash
 iverilog good_mux.v tb_good_mux.v
 ```
 
-This command compiles the design file and the testbench.
+This command compiles both the design and its testbench.
 
 ---
 
-## Step 3 – Execute the Simulation
+## 3.2 Running the Simulation
+
+The compiled simulation was executed using:
 
 ```bash
 ./a.out
 ```
 
-Running the above command executes the simulation and generates the waveform file.
+Running the simulation produces the waveform data generated by the testbench.
 
 ---
 
-## Step 4 – Open the Waveform
+## 3.3 Viewing the Waveform
+
+The generated waveform was opened using:
 
 ```bash
 gtkwave tb_good_mux.vcd
 ```
 
-The waveform can now be analyzed using GTKWave.
+### GTKWave Result
 
-### GTKWave Output
+![2:1 Multiplexer Waveform](images/waveform.png)
 
-<img width="1920" height="1012" alt="waveform" src="https://github.com/user-attachments/assets/97c72225-1e60-4409-832a-bb0c5b3b51ae" />
+The GTKWave waveform shows the changes in the input signals, select signal and multiplexer output during simulation.
+
+When the select signal changes, the output follows the corresponding selected input. This allows the functional behavior of the RTL multiplexer to be verified.
 
 ---
 
-# 4️⃣ Multiplexer Design Explanation
+# 4. Multiplexer Design Explanation
 
-## Verilog Design
+## 4.1 Verilog RTL Design
+
+The 2:1 multiplexer was described using the following Verilog code:
 
 ```verilog
 module good_mux (
@@ -140,50 +198,51 @@ endmodule
 
 ---
 
-## Working Principle
+## 4.2 Working Principle
 
-### Inputs
+The multiplexer has two data inputs, `i0` and `i1`, one selection signal `sel`, and one output `y`.
 
-- `i0` – First input
-- `i1` – Second input
-- `sel` – Selection signal
+The operation is:
 
-### Output
+| `sel` | Output |
+|---|---|
+| `0` | `y = i0` |
+| `1` | `y = i1` |
 
-- `y` – Multiplexer output
+Therefore:
 
-### Operation
+- When `sel = 0`, the first input `i0` is selected.
+- When `sel = 1`, the second input `i1` is selected.
 
-- When `sel = 0`, the output follows **i0**.
-- When `sel = 1`, the output follows **i1**.
-
-### Verilog Code Screenshot
-
-<img width="1920" height="1012" alt="code" src="https://github.com/user-attachments/assets/24df9d93-00c8-4e5e-8ee0-a331dfd32adf" />
+The `always @(*)` block describes combinational behavior because the output depends on the current input and select signals.
 
 ---
 
-# 5️⃣ Introduction to Yosys
+# 5. Introduction to Yosys
 
-**Yosys** is an open-source tool used to synthesize Verilog RTL designs and generate a gate-level netlist.
+**Yosys** is an open-source RTL synthesis tool.
 
-### Yosys Synthesis Flow
+It converts a Verilog RTL description into a gate-level representation and can perform technology mapping using a standard-cell library.
 
 The basic synthesis flow is:
 
-1. Load the technology library using `read_liberty`.
-2. Read the RTL design using `read_verilog`.
-3. Set the top module using `synth -top`.
-4. Perform technology mapping using `abc`.
-5. Generate the netlist using `write_verilog`.
-
 ```text
-RTL Design + Library
-        ↓
-      Yosys
-        ↓
-Synthesized Netlist
+RTL Design
+     ↓
+RTL Analysis
+     ↓
+Synthesis
+     ↓
+Technology Mapping
+     ↓
+Gate-Level Netlist
 ```
+
+---
+
+## 5.1 Basic Yosys Commands
+
+The synthesis process uses commands such as:
 
 ```bash
 read_liberty -lib <library>.lib
@@ -193,65 +252,107 @@ abc -liberty <library>.lib
 write_verilog synthesized_mux.v
 ```
 
-The synthesized netlist is then verified using the testbench and **GTKWave**.
+The purpose of these commands is:
 
-
-<img width="705" height="416" alt="Screenshot 2026-08-08 222843" src="https://github.com/user-attachments/assets/c07f8c9e-fe0f-4822-881d-e827b5b9f352" />
-<img width="703" height="334" alt="Screenshot 2026-08-08 222858" src="https://github.com/user-attachments/assets/3eff0420-b3f9-4bb9-a830-da05794bb501" />
-
+| Command | Purpose |
+|---|---|
+| `read_liberty` | Loads the technology library |
+| `read_verilog` | Reads the RTL design |
+| `synth -top` | Synthesizes the selected top module |
+| `abc` | Performs technology mapping |
+| `write_verilog` | Generates the synthesized Verilog netlist |
 
 ---
 
-# 6️⃣ RTL Design and Synthesis
+## 5.2 Yosys Synthesis Flow
 
-After introducing Yosys, the next step was to understand how an **RTL design is transformed into a gate-level implementation** through synthesis.
+The RTL design and technology library are processed by Yosys to produce the synthesized implementation.
 
 ```text
-RTL Design
-    ↓
-  Yosys
-    ↓
-Gate-Level Netlist
+RTL Design + Technology Library
+             ↓
+           Yosys
+             ↓
+      Logic Optimization
+             ↓
+     Technology Mapping
+             ↓
+     Gate-Level Netlist
 ```
 
-### RTL vs Gate-Level Design
+The synthesized netlist can then be examined and verified.
+
+---
+
+# 6. RTL Design and Synthesis
+
+Synthesis is the process of transforming an RTL description into a gate-level implementation.
+
+The RTL describes **what the circuit should do**, while the synthesized gate-level design represents **how the required functionality is implemented using available cells**.
+
+---
+
+## 6.1 RTL vs Gate-Level Design
 
 | RTL Design | Gate-Level Design |
-|------------|-------------------|
+|---|---|
 | Describes circuit functionality using Verilog. | Represents the circuit using library cells. |
 | Easier to understand and modify. | Represents the synthesized hardware structure. |
-| Used for RTL simulation. | Used for further implementation and verification. |
-<img width="520" height="279" alt="Screenshot 2026-08-09 013331" src="https://github.com/user-attachments/assets/493daa50-28dd-4198-8ae1-a87f09a4df55" />
+| Used for RTL simulation. | Used for implementation and further verification. |
 
-
----
-
-# 7️⃣ Understanding the `.lib` File and Cell Flavors
-
-A **`.lib` (Liberty) file** contains information about the standard cells available in a particular technology library, including their functionality, timing, power, and other characteristics.
-
-Different versions of cells are available for different requirements.
-
-### Faster vs Slower Cells
-
-- **Faster cells** have lower delay and are useful for timing-critical paths.
-- **Slower cells** generally have lower power or area and can be used where high speed is not required.
-
-Using fast cells everywhere is unnecessary because not every path is timing-critical. Therefore, synthesis selects suitable cells based on factors such as **timing, power, and area**.
+The synthesis process bridges the gap between the behavioral RTL description and the technology-specific hardware implementation.
 
 ---
 
-# 8️⃣ Launching Yosys and Synthesizing the Good Mux
+# 7. Understanding the `.lib` File and Cell Flavors
 
-Yosys can be launched from the terminal using:
+A **`.lib` (Liberty) file** contains information about the standard cells available in a technology library.
+
+It can contain information related to:
+
+- Cell functionality
+- Timing
+- Power
+- Area
+- Input and output characteristics
+
+The technology library provides the cells that can be used during technology mapping.
+
+---
+
+## 7.1 Faster and Slower Cell Flavors
+
+Different versions of standard cells can be available for different implementation requirements.
+
+### Faster Cells
+
+Faster cells generally have lower propagation delay and are useful for timing-critical paths.
+
+### Slower Cells
+
+Slower cells can be used where high speed is not required and may provide advantages in other implementation characteristics such as power or area.
+
+Using the fastest cells everywhere is unnecessary because not every path is timing-critical.
+
+Therefore, the synthesis process selects appropriate cells based on design requirements such as:
+
+- Timing
+- Power
+- Area
+
+---
+
+# 8. Yosys Synthesis of the Good Mux
+
+Yosys was launched from the Ubuntu terminal using:
 
 ```bash
 yosys
 ```
-<img width="1920" height="146" alt="yosys launch" src="https://github.com/user-attachments/assets/bf0a0f76-6e89-4b5a-b1b6-3212990fe666" />
 
+The `good_mux` design was then synthesized using the SKY130 technology library.
 
-The `good_mux` design was then synthesized using the following commands:
+The synthesis commands used were:
 
 ```bash
 read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -261,56 +362,152 @@ abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 write_verilog -noattr good_mux_net.v
 ```
 
-### Command Meaning
+---
 
-| Command | Purpose |
-|---------|---------|
-| `read_liberty` | Loads the technology library. |
-| `read_verilog` | Reads the Verilog RTL design. |
-| `synth -top` | Synthesizes the specified top module. |
-| `abc` | Performs technology mapping using the library. |
-| `write_verilog` | Generates the synthesized Verilog netlist. |
+## 8.1 Launching Yosys
+
+![Yosys Launch](images/yosys_launch.png)
+
+The Yosys prompt confirms that the synthesis environment has been started and is ready to accept synthesis commands.
 
 ---
 
-# 9️⃣ Synthesis Results and Gate-Level Representation
+## 8.2 Reading the Technology Library
 
-After synthesis, Yosys provides statistics about the generated design, including information about its ports, wires, and cells.
+The following command loads the SKY130 standard-cell library:
 
-<img width="1920" height="401" alt="sysn statistics" src="https://github.com/user-attachments/assets/58e6f167-adfc-4a03-a277-e74cef4f5ee5" />
+```bash
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+```
 
+The library provides the technology-specific cells used during synthesis and mapping.
 
-The synthesized circuit can also be visualized using:
+---
+
+## 8.3 Reading the Verilog Design
+
+The RTL design was loaded using:
+
+```bash
+read_verilog good_mux.v
+```
+
+This imports the Verilog description of the 2:1 multiplexer into Yosys.
+
+---
+
+## 8.4 Synthesizing the Design
+
+The design was synthesized using:
+
+```bash
+synth -top good_mux
+```
+
+The `-top` option identifies `good_mux` as the top-level module.
+
+---
+
+## 8.5 Technology Mapping
+
+Technology mapping was performed using:
+
+```bash
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+
+The ABC process maps the synthesized logic to cells available in the selected SKY130 library.
+
+---
+
+# 9. Synthesis Results and Gate-Level Representation
+
+After synthesis, Yosys provides statistics about the resulting design.
+
+These statistics provide information about the synthesized module and the cells used in the implementation.
+
+### Yosys Synthesis Statistics
+
+![Yosys Synthesis Statistics](images/synth_statistics.png)
+
+The synthesis statistics provide information about the generated design and help understand the resulting hardware after synthesis.
+
+---
+
+## 9.1 Viewing the Synthesized Circuit
+
+The synthesized circuit can be visualized using:
 
 ```bash
 show
 ```
 
-This displays a graphical representation of the synthesized gate-level design.
+The `show` command generates a graphical representation of the synthesized design.
 
-<img width="1920" height="1012" alt="goodmux logic" src="https://github.com/user-attachments/assets/6f8ff5ca-6120-4441-835c-9d92a284c6a4" />
+### Gate-Level Representation
+
+![Good Mux Gate-Level Representation](images/goodmux_logic.png)
+
+The gate-level representation shows how the original RTL multiplexer is implemented using logic cells after synthesis.
+
+This provides a visual connection between the original Verilog RTL and the synthesized hardware structure.
 
 ---
 
-# 🔟 Generated Gate-Level Netlist
+# 10. Generated Gate-Level Netlist
 
-The synthesized netlist was generated using:
+The synthesized Verilog netlist was generated using:
 
 ```bash
 write_verilog -noattr good_mux_net.v
 ```
 
-It can be viewed using:
+The generated file can be viewed using:
 
 ```bash
 cat good_mux_net.v
 ```
 
-The generated netlist represents the original RTL functionality using cells from the selected technology library.
+The netlist represents the synthesized implementation of the original RTL design using cells from the selected technology library.
 
-<img width="1920" height="1012" alt="main netlist" src="https://github.com/user-attachments/assets/97d85548-7fb2-4188-8316-5222ead5a96d" />
+### Generated Netlist
+
+![Generated Gate-Level Netlist](images/main_netlist.png)
+
+The netlist provides the textual gate-level representation generated after synthesis and technology mapping.
+
+It can be used for further gate-level analysis and verification.
 
 ---
-# 1️⃣1️⃣ Conclusion
 
-This experiment provided an overview of the **RTL-to-netlist design flow**. I learned how Verilog RTL is simulated using **Icarus Verilog** and analyzed with **GTKWave**, followed by synthesis using **Yosys**. I also understood the purpose of `.lib` files, different cell flavors, and the selection of cells based on timing, power, and area. Finally, I synthesized the `good_mux` design, examined the synthesis results, viewed its gate-level representation, and generated the synthesized Verilog netlist.
+# 11. Conclusion
+
+Module 1 provided an introduction to the complete **RTL-to-netlist design flow**.
+
+The 2:1 multiplexer was designed using Verilog and verified through simulation using **Icarus Verilog**. The resulting waveform was analyzed using **GTKWave** to confirm the functional behavior of the design.
+
+The module also introduced **Yosys synthesis**, including reading the RTL design, loading a technology library, synthesizing the design, performing technology mapping and generating a gate-level netlist.
+
+The purpose of the **`.lib` file** and different standard-cell flavors was also studied, including the relationship between timing, power and area requirements.
+
+The overall flow studied was:
+
+```text
+Verilog RTL
+     ↓
+Testbench
+     ↓
+Icarus Verilog
+     ↓
+GTKWave Verification
+     ↓
+Yosys Synthesis
+     ↓
+Technology Mapping
+     ↓
+Gate-Level Representation
+     ↓
+Generated Netlist
+```
+
+This module established the foundation for understanding RTL design, simulation, synthesis and technology mapping used in the subsequent modules.
