@@ -1,11 +1,19 @@
 # RTL_Design_Workshop
-This repository documents my learning journey through RTL design, Verilog simulation, synthesis, timing libraries, and sequential circuit design. Each day contains the concepts explored, practical experiments, commands used, results, screenshots, and observations from the workshop.
+
+This repository documents my learning journey through RTL design, Verilog simulation, synthesis, timing libraries, sequential circuit design, Gate-Level Simulation (GLS), and synthesis-simulation mismatch analysis.
+
+Each module contains the concepts studied, practical experiments, commands used, simulation results, synthesis results, screenshots, and observations from the workshop.
+
+---
+
 ## 📚 Workshop Progress
 
-| **Day** | **Topics Covered**                                            | **Status**  |
-| ------- | ------------------------------------------------------------- | ----------- |
-| Day 1   | Verilog RTL Design, Icarus Verilog, GTKWave & Yosys Synthesis | ✅ Completed |
-| Day 2   | Timing Libraries, Synthesis Methods & Flip-Flop RTL Coding    | ✅ Completed |
+| **Module** | **Topics Covered** | **Status** |
+|------------|--------------------|------------|
+| Module 1 | Verilog RTL Design, Icarus Verilog, GTKWave & Yosys Synthesis | ✅ Completed |
+| Module 2 | Timing Libraries, Synthesis Methods & Flip-Flop RTL Coding | ✅ Completed |
+| Module 3 | Combinational and Sequential Logic Optimizations | ✅ Completed |
+| Module 4 | GLS, Synthesis-Simulation Mismatch & Blocking/Non-Blocking Statements | ✅ Completed |
 
 ---
 
@@ -16,17 +24,27 @@ RTL_Design_Workshop
 │
 ├── README.md
 │
-├── Day_1
+├── module_1
 │   └── README.md
 │
-└── Day_2
-    └── README.md
-
+├── module_2
+│   ├── README.md
+│   └── images/
+│
+├── module_3
+│   ├── README.md
+│   └── images/
+│
+└── module_4
+    ├── README.md
+    └── images/
 ```
 
-# Day 1 – RTL Design, Simulation & Synthesis
+---
 
-Day 1 focused on understanding the basic **RTL design flow**, starting with Verilog simulation and progressing towards synthesis using Yosys.
+# Module 1 – RTL Design, Simulation & Synthesis
+
+Module 1 focused on understanding the basic RTL design flow, starting with Verilog simulation and progressing towards synthesis using Yosys.
 
 ### Topics Covered
 
@@ -44,26 +62,15 @@ Day 1 focused on understanding the basic **RTL design flow**, starting with Veri
 - Gate-level representation
 - Generated gate-level netlist
 
----
+## 🔗 Module 1 Documentation
 
-## 🔗 Day 1 Documentation
-
-The complete Day 1 experiment, including commands, explanations, screenshots, synthesis results, and observations:
-
-➡️ [Day 1 – RTL Design, Simulation & Synthesis](./DAY_1/README.md)
-## 🛠 Tools Used
-
-- Verilog
-- Icarus Verilog (iverilog)
-- GTKWave
-- Yosys
-- Linux / Ubuntu
-- Git & GitHub
+➡️ [Module 1 – RTL Design, Simulation & Synthesis](./module_1/README.md)
 
 ---
-# Day 2 – Timing Libraries, Synthesis & Flip-Flop RTL
 
-Day 2 focused on understanding **technology libraries, timing information, hierarchical and flattened synthesis, and flip-flop RTL coding styles**.
+# Module 2 – Timing Libraries, Synthesis & Flip-Flop RTL
+
+Module 2 focused on understanding technology libraries, timing information, hierarchical and flattened synthesis, and flip-flop RTL coding styles.
 
 ### Topics Covered
 
@@ -83,26 +90,99 @@ Day 2 focused on understanding **technology libraries, timing information, hiera
 - Technology mapping using `abc`
 - Gate-level representation
 
+## 🔗 Module 2 Documentation
+
+➡️ [Module 2 – Timing Libraries, Synthesis & Flip-Flop RTL](./module_2/README.md)
+
 ---
 
-## 🔗 Day 2 Documentation
+# Module 3 – Combinational and Sequential Logic Optimizations
 
-The complete Day 2 experiment, including commands, explanations, screenshots, simulation results, synthesis results, and observations:
+Module 3 focused on understanding RTL optimization and how combinational and sequential logic are optimized during synthesis.
 
-➡️ [Day 2 – Timing Libraries, Synthesis & Flip-Flop RTL](./DAY_2/README.md)
+### Topics Covered
+
+- RTL optimization
+- Combinational logic optimization
+- AND logic
+- OR logic
+- Three-input logic
+- XNOR logic
+- Constant propagation
+- Sequential logic optimization
+- Counter optimization
+- Flip-flop optimization
+- Optimization of unused sequential logic
+- Yosys synthesis
+- SKY130 technology mapping
+- Icarus Verilog simulation
+- GTKWave waveform analysis
+
+## 🔗 Module 3 Documentation
+
+➡️ [Module 3 – Combinational and Sequential Logic Optimizations](./module_3/README.md)
+
+---
+
+# Module 4 – GLS, Synthesis-Simulation Mismatch & Blocking/Non-Blocking Statements
+
+Module 4 focused on Gate-Level Simulation (GLS), synthesis-simulation mismatch, and the correct use of blocking and non-blocking assignments in Verilog.
+
+### Topics Covered
+
+- Gate-Level Simulation (GLS)
+- GLS concepts and flow
+- Synthesis-simulation mismatch
+- Blocking assignments
+- Non-blocking assignments
+- Caveats with blocking statements
+- Ternary operator and multiplexer implementation
+- GLS laboratory experiments
+- Synthesis-simulation mismatch experiments
+- Blocking statement mismatch experiments
+- Technology-specific simulation
+- Icarus Verilog
+- GTKWave
+- Yosys
+
+## 🔗 Module 4 Documentation
+
+➡️ [Module 4 – GLS, Synthesis-Simulation Mismatch & Blocking/Non-Blocking Statements](./module_4/README.md)
 
 ---
 
 ## 🛠 Tools Used
 
 - Verilog
-- Icarus Verilog (iverilog)
+- Icarus Verilog (`iverilog`)
 - GTKWave
 - Yosys
 - SKY130 Standard Cell Library
 - Linux / Ubuntu
-- Git & GitHub
+- Git
+- GitHub
+
 ---
+
+## 📌 Key Learning Outcomes
+
+Through these modules, I gained practical understanding of:
+
+- RTL design using Verilog
+- Simulation and testbench development
+- Waveform analysis
+- RTL synthesis
+- Technology mapping
+- Timing libraries
+- Sequential circuit design
+- Combinational and sequential optimization
+- Gate-Level Simulation
+- Synthesis-simulation mismatch
+- Blocking and non-blocking coding styles
+- SKY130 standard-cell based design flow
+
+---
+
 ## 👩‍💻 Author
 
-AISHWARYA NOMULA
+**AISHWARYA NOMULA**
