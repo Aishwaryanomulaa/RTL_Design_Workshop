@@ -2,249 +2,400 @@
 
 ## 🎯 Objective
 
-The objective of Module 5 was to understand optimization during RTL synthesis and to study how different Verilog coding constructs are interpreted by synthesis tools.
+The objective of Module 5 was to understand how RTL coding styles affect synthesis and the resulting hardware implementation.
 
-The experiments focused on `if`, `case`, `for` loop and `for generate` constructs. The effect of incomplete and overlapping conditions on synthesized hardware was also studied.
+The module focused on `if`, `case`, `for` loop and `for generate` constructs. The experiments also demonstrated how incomplete assignments, overlapping conditions and different RTL descriptions can affect simulation and synthesis.
 
-The experiments were performed using Icarus Verilog, GTKWave and Yosys with the SKY130 standard-cell library.
+The designs were simulated using Icarus Verilog, waveforms were analyzed using GTKWave, and synthesis and technology mapping were performed using Yosys and the SKY130 standard-cell library.
 
 ---
 
 ## 📑 Contents
 
-- [1. If and Case Constructs](#1-if-and-case-constructs)
-- [2. Incomplete If Case](#2-incomplete-if-case)
-- [3. Incomplete Overlapping Case](#3-incomplete-overlapping-case)
-- [4. For Loop and For Generate](#4-for-loop-and-for-generate)
+- [1. RTL Coding Styles: IF-ELSE and CASE Statements](#1-rtl-coding-styles-if-else-and-case-statements)
+- [2. Incomplete IF and CASE Constructs](#2-incomplete-if-and-case-constructs)
+- [3. Incomplete and Overlapping CASE](#3-incomplete-and-overlapping-case)
+- [4. FOR Loop and FOR Generate](#4-for-loop-and-for-generate)
 - [5. Laboratory Experiments](#5-laboratory-experiments)
 - [6. Observations](#6-observations)
 - [7. Conclusion](#7-conclusion)
 
 ---
 
-# 1. If and Case Constructs
+# 1. RTL Coding Styles: IF-ELSE and CASE Statements
 
-The `if` and `case` constructs are commonly used in Verilog to describe conditional logic.
+RTL coding describes the behavior of a digital circuit before it is converted into gates during synthesis.
 
-During synthesis, these constructs are converted into corresponding hardware depending on the conditions specified in the RTL.
-
-Proper coding of conditional statements is important because incomplete or overlapping conditions can result in unintended hardware.
+The way RTL is written determines how the synthesis tool interprets the intended hardware. Conditional statements are commonly used to select data, control operations and describe decision-making logic.
 
 ---
 
-## 1.1 If Case Constructs – Part 1
+## 1.1 Priority Logic Using IF-ELSE
 
-The first experiment introduced the basic `if` and `case` constructs used to describe conditional logic.
+An `if-else` structure evaluates conditions in a defined order.
+
+If multiple conditions are true, the first true condition takes priority.
+
+Example:
+
+```verilog
+always @(*) begin
+    if (condition_1)
+        y = value_1;
+    else if (condition_2)
+        y = value_2;
+    else
+        y = value_3;
+end
+```
+
+The priority can be understood as:
+
+| Statement | Priority |
+|---|---|
+| `if` | Highest |
+| `else if` | Next |
+| `else` | Lowest |
+
+Therefore, `if-else` is useful when the order in which conditions are evaluated is important, such as in priority encoders and control logic.
 
 ---
 
-## 1.2 If Case Constructs – Part 2
+## 1.2 Selection Logic Using CASE
 
-The second experiment examined different conditional coding structures and their interpretation during synthesis.
+A `case` statement compares a selector expression with a set of possible values.
+
+Example:
+
+```verilog
+always @(*) begin
+    case (sel)
+        2'b00: y = a;
+        2'b01: y = b;
+        2'b10: y = c;
+        default: y = d;
+    endcase
+end
+```
+
+This coding style is useful when different input values select different operations or data paths.
+
+Common applications include:
+
+- Multiplexers
+- Decoders
+- State machines
+- Control logic
 
 ---
 
-## 1.3 If Case Constructs – Part 3
+## 1.3 IF-ELSE and CASE Comparison
 
-The third experiment continued the study of `if` and `case` constructs and their effect on synthesized hardware.
+| Feature | IF-ELSE | CASE |
+|---|---|---|
+| Main purpose | Priority-based decisions | Multi-way selection |
+| Evaluation | Conditions are checked sequentially | Selector is compared with case items |
+| Typical applications | Priority logic and control | MUX, decoder and FSM |
+| Main coding concern | Condition ordering and completeness | Coverage and overlapping patterns |
+
+The choice between `if-else` and `case` depends on the intended hardware behavior and the relationship between the conditions.
 
 ---
 
-# 2. Incomplete If Case
+# 2. Incomplete IF and CASE Constructs
 
-An incomplete `if` or `case` statement occurs when an output is not assigned for every possible input condition.
+An incomplete conditional statement occurs when an output is not assigned for every possible input condition.
 
-Such incomplete assignments can cause synthesis tools to infer unintended hardware.
+For combinational logic, outputs should normally be assigned for all required conditions. Otherwise, synthesis may infer storage behavior.
 
 ---
 
-## 2.1 Incomplete If – Part 1
+## 2.1 Incomplete IF
 
-The first incomplete `if` experiment was synthesized and simulated.
+An incomplete `if` statement does not provide an assignment when the condition is false.
+
+Example:
+
+```verilog
+always @(*) begin
+    if (sel)
+        y = a;
+end
+```
+
+When `sel` is false, `y` is not assigned a new value.
+
+This can result in latch inference during synthesis because the circuit needs to retain the previous value of the output.
 
 ### Synthesized Circuit
 
-![Incomplete If Schematic](<images/tb_incomp_if(schematic).png>)
+![Incomplete IF Schematic](<images/tb_incomp_if(schematic).png>)
 
-### GTKWave Result
+The synthesized schematic represents the hardware inferred from the incomplete `if` RTL description.
 
-![Incomplete If Waveform](<images/tb_incomp_if(waveform).png>)
+### Simulation and Waveform Analysis
 
-The schematic and waveform were used to study the behavior of the incomplete `if` implementation.
+![Incomplete IF Waveform](<images/tb_incomp_if(waveform).png>)
+
+The waveform shows the relationship between the input condition and the output during simulation.
+
+When the condition does not result in a new assignment, the output can retain its previous value. This demonstrates why completeness is important when writing combinational RTL.
 
 ---
 
-## 2.2 Incomplete If – Part 2
+## 2.2 Incomplete IF – Second Experiment
 
-A second incomplete `if` experiment was performed to further analyze the synthesis and simulation behavior.
+A second incomplete `if` implementation was studied to observe its behavior during simulation and synthesis.
 
 ### Synthesized Circuit
 
-![Incomplete If 2 Schematic](<images/tb_incomp_if2(schematic).png>)
+![Incomplete IF 2 Schematic](<images/tb_incomp_if2(schematic).png>)
 
-### GTKWave Result
+The schematic shows the synthesized hardware corresponding to the RTL implementation.
 
-![Incomplete If 2 Waveform](<images/tb_incomp_if2(waveform).png>)
+### Simulation and Waveform Analysis
 
-The waveform was analyzed for different input conditions.
+![Incomplete IF 2 Waveform](<images/tb_incomp_if2(waveform).png>)
 
----
+The waveform was analyzed to observe the output response for the different input conditions applied by the testbench.
 
-# 3. Incomplete Overlapping Case
-
-The `case` construct is useful for implementing selection and decision logic.
-
-An incomplete case statement does not define an output for every possible condition. Overlapping case conditions can also result in unexpected behavior.
-
-The experiments in this section focused on incomplete and overlapping case implementations.
+The experiment demonstrates how incomplete conditional assignments can affect the behavior of combinational RTL.
 
 ---
 
-## 3.1 Incomplete Case
+# 3. Incomplete and Overlapping CASE
+
+The `case` construct is commonly used to describe multi-way selection logic.
+
+A case statement can become problematic when not all required conditions are covered or when multiple conditions can overlap.
+
+Incomplete and overlapping case conditions can produce unintended behavior and may affect the hardware inferred during synthesis.
+
+---
+
+## 3.1 Incomplete CASE
+
+An incomplete case statement does not specify an output for every possible selector value.
+
+Example:
+
+```verilog
+always @(*) begin
+    case (sel)
+        2'b00: y = a;
+        2'b01: y = b;
+    endcase
+end
+```
+
+Here, the cases for `2'b10` and `2'b11` are not specified.
+
+A `default` assignment or complete case coverage can be used when appropriate to ensure that the output is defined.
 
 ### Synthesized Circuit
 
-![Incomplete Case Schematic](<images/tb_incomp_case(schematic).png>)
+![Incomplete CASE Schematic](<images/tb_incomp_case(schematic).png>)
 
-### GTKWave Result
+The schematic shows the hardware produced from the incomplete case RTL.
 
-![Incomplete Case Waveform](<images/tb_incomp_case(waveform).png>)
+### Simulation and Waveform Analysis
 
-The experiment was used to observe the behavior of an incomplete case implementation during simulation and synthesis.
+![Incomplete CASE Waveform](<images/tb_incomp_case(waveform).png>)
 
----
+The waveform shows the output behavior for the selector values tested by the testbench.
 
-## 3.2 Bad Case Implementation
-
-A case implementation was analyzed to understand the effect of incomplete case conditions.
-
-### GTKWave Result
-
-![Bad Case Waveform](<images/tb_bad_case(waveform).png>)
-
-The waveform shows the simulated behavior of the design for the tested input conditions.
+This experiment demonstrates the importance of complete assignments when describing combinational logic.
 
 ---
 
-## 3.3 Bad Case with Technology Library
+## 3.2 Bad CASE Implementation
+
+A case implementation was analyzed to study the effect of incomplete or improperly specified case conditions.
+
+### Simulation and Waveform Analysis
+
+![Bad CASE Waveform](<images/tb_bad_case(waveform).png>)
+
+The waveform shows the simulated response of the design for the input combinations applied during the experiment.
+
+The result demonstrates how the RTL coding of conditional statements can influence the observed output behavior.
+
+---
+
+## 3.3 CASE Implementation with Technology Library
 
 The design was also analyzed using the technology-specific library.
 
-### GTKWave Result
+### Simulation Result
 
-![Bad Case My Library Waveform](<images/tb_bad_case(waveform)(my_lib).png>)
+![Bad CASE My Library](<images/tb_bad_case(waveform)(my_lib).png>)
 
-The result demonstrates the behavior after technology-specific synthesis and mapping.
+The result shows the behavior after the design was processed using the technology-specific library.
+
+Technology mapping allows the RTL description to be represented using cells available in the selected standard-cell library.
 
 ---
 
-## 3.4 Partial Case Assignment
+## 3.4 Partial CASE Assignment
 
-A partial case assignment was studied as part of the incomplete case experiments.
+A partial case assignment was also studied.
 
 ### Synthesized Circuit
 
-![Partial Case Assignment Schematic](<images/tb_partial_case_assign(schematic).png>)
+![Partial CASE Assignment](<images/tb_partial_case_assign(schematic).png>)
 
-The experiment demonstrates the importance of properly assigning outputs in combinational RTL.
+The synthesized schematic shows the hardware resulting from the partial case assignment.
+
+This experiment demonstrates why outputs should be assigned appropriately for the required input conditions when designing combinational logic.
 
 ---
 
-# 4. For Loop and For Generate
+# 4. FOR Loop and FOR Generate
 
 Verilog provides the `for` loop to describe repetitive operations.
 
-The `for generate` construct can be used to create repeated hardware structures during elaboration.
+The `for generate` construct is used to create repeated hardware structures.
 
-These constructs allow repetitive hardware to be described without manually writing the same structure multiple times.
-
----
-
-## 4.1 For Loop and For Generate – Part 1
-
-The first experiment introduced the use of `for` loops and `for generate` constructs for describing repetitive hardware.
+These constructs are especially useful when the same hardware structure needs to be repeated multiple times.
 
 ---
 
-## 4.2 For Loop and For Generate – Part 2
+## 4.1 FOR Loop
 
-The second experiment examined how repeated RTL structures are interpreted during synthesis.
+A `for` loop can be used inside procedural blocks to perform repetitive operations.
+
+Example:
+
+```verilog
+for (i = 0; i < 4; i = i + 1)
+begin
+    ...
+end
+```
+
+During synthesis, the loop is elaborated into the corresponding hardware structure.
+
+The loop therefore provides a convenient way of describing repeated operations without writing the same RTL statements multiple times.
 
 ---
 
-## 4.3 For Loop and For Generate – Part 3
+## 4.2 FOR Generate
 
-The third experiment continued the study of loop-based and generate-based hardware structures.
+A `for generate` construct can be used to create multiple instances of a hardware structure.
+
+Example:
+
+```verilog
+genvar i;
+
+generate
+    for (i = 0; i < 4; i = i + 1)
+    begin
+        ...
+    end
+endgenerate
+```
+
+Generate constructs are evaluated during elaboration and are useful for creating repeated hardware structures such as adders, multiplexers and other regular circuits.
+
+---
+
+## 4.3 FOR Loop and FOR Generate Comparison
+
+| Feature | FOR Loop | FOR Generate |
+|---|---|---|
+| Purpose | Repetitive procedural operations | Repeated hardware generation |
+| Used during | Procedural execution / synthesis interpretation | Elaboration |
+| Common use | Repeated assignments and calculations | Multiple hardware instances |
+| Benefit | Reduces repetitive RTL code | Creates regular hardware structures |
 
 ---
 
 # 5. Laboratory Experiments
 
-The following experiments demonstrated practical applications of the concepts studied in this module.
+The following experiments demonstrate practical applications of the concepts studied in this module.
 
 ---
 
 ## 5.1 Ripple Carry Adder
 
-A Ripple Carry Adder (RCA) was implemented using repetitive hardware structures.
+A Ripple Carry Adder (RCA) was implemented using repetitive full-adder structures.
 
-### GTKWave Result
+The carry output of one stage is connected to the carry input of the next stage.
+
+### Simulation and Waveform Analysis
 
 ![RCA Waveform](<images/tb_rca(waveform).png>)
 
-The waveform was analyzed to verify the sum and carry outputs for different input combinations.
+The waveform shows the applied input combinations along with the resulting sum and carry outputs.
+
+The simulation verifies the functional operation of the Ripple Carry Adder for the tested input conditions.
 
 ---
 
-## 5.2 Multiplexer Using Generate
+## 5.2 Multiplexer Using FOR Generate
 
-A multiplexer was implemented using a generate construct.
+A multiplexer was implemented using a generate-based hardware structure.
 
-### GTKWave Result
+### Simulation and Waveform Analysis
 
 ![MUX Generate Waveform](<images/tb_mux_generate(waveform).png>)
 
-The waveform was used to verify the multiplexer operation for different input and select conditions.
+The waveform shows the input, select and output signals during simulation.
+
+The output changes according to the selected input, demonstrating the operation of the generated multiplexer structure.
 
 ---
 
-## 5.3 Comparator Using Case
+## 5.3 Comparator Using CASE
 
-A comparator was implemented using a case-based RTL description.
+A comparator was implemented using a `case` construct to describe the required comparison logic.
 
 ### Synthesized Circuit
 
-![Comparator Case Schematic](<images/tb_comp_case(schematic).png>)
+![Comparator CASE Schematic](<images/tb_comp_case(schematic).png>)
 
-### GTKWave Result
+The schematic represents the synthesized comparator logic.
 
-![Comparator Case Waveform](<images/tb_comp_case(waveform).png>)
+### Simulation and Waveform Analysis
 
-The waveform was analyzed to verify the comparator output for different input combinations.
+![Comparator CASE Waveform](<images/tb_comp_case(waveform).png>)
 
----
+The waveform shows the input combinations and the corresponding comparator output.
 
-## 5.4 Demultiplexer Using Case
-
-A demultiplexer was implemented using a case construct.
-
-### GTKWave Result
-
-![Demux Case Waveform](<images/tb_demux_case(waveform).png>)
-
-The waveform demonstrates how the input signal is routed to the selected output.
+The simulation was used to verify the comparison behavior of the RTL design.
 
 ---
 
-## 5.5 Demultiplexer Using Generate
+## 5.4 Demultiplexer Using CASE
 
-A generate-based demultiplexer was implemented and simulated.
+A demultiplexer was implemented using a `case` construct.
 
-### GTKWave Result
+A demultiplexer routes a single input to one of several outputs depending on the select signal.
+
+### Simulation and Waveform Analysis
+
+![Demux CASE Waveform](<images/tb_demux_case(waveform).png>)
+
+The waveform shows how the selected output responds to the input signal while the select lines determine the active output path.
+
+This verifies the functional behavior of the case-based demultiplexer.
+
+---
+
+## 5.5 Demultiplexer Using FOR Generate
+
+A generate-based demultiplexer was also implemented.
+
+The repeated output-selection structure can be described efficiently using a generate construct.
+
+### Simulation and Waveform Analysis
 
 ![Demux Generate Waveform](<images/tb_demux_generate(waveform).png>)
 
-The waveform was used to verify the operation of the generated demultiplexer.
+The waveform shows the output response for the different select conditions.
+
+The simulation verifies that the input is routed to the appropriate output according to the select signal.
 
 ---
 
@@ -252,30 +403,33 @@ The waveform was used to verify the operation of the generated demultiplexer.
 
 | Experiment | Observation |
 |---|---|
-| If Case Constructs | `if` and `case` constructs were studied for describing conditional logic |
-| Incomplete If | Incomplete assignments were analyzed during synthesis and simulation |
-| Incomplete If – Part 2 | A second incomplete `if` implementation was studied |
-| Incomplete Case | The behavior of incomplete case conditions was analyzed |
-| Bad Case | The effect of incomplete case coding was observed |
-| Bad Case with My Library | Technology-specific synthesis and mapping were analyzed |
-| Partial Case Assignment | Partial assignments in case logic were studied |
-| For Loop | Used to describe repetitive RTL operations |
-| For Generate | Used to create repeated hardware structures |
-| Ripple Carry Adder | Repetitive adder hardware was implemented and simulated |
-| MUX Generate | A generate construct was used for multiplexer implementation |
-| Comparator Case | A case construct was used for comparator implementation |
-| Demux Case | A case construct was used for demultiplexer implementation |
-| Demux Generate | A generate construct was used for demultiplexer implementation |
+| IF-ELSE | Conditions are evaluated in priority order |
+| CASE | Selector values are compared with specified case items |
+| Incomplete IF | Missing assignments can result in latch inference |
+| Incomplete IF – Second Experiment | The effect of incomplete conditional assignment was observed |
+| Incomplete CASE | Missing case conditions can leave the output incompletely specified |
+| Bad CASE | Improper case coding can affect the simulated and synthesized behavior |
+| CASE with Technology Library | Technology-specific mapping was observed |
+| Partial CASE Assignment | Output completeness is important for combinational logic |
+| FOR Loop | Useful for describing repetitive RTL operations |
+| FOR Generate | Useful for creating repeated hardware structures |
+| Ripple Carry Adder | Repeated full-adder structures were used to implement addition |
+| MUX Generate | Generate construct was used to create a multiplexer structure |
+| Comparator CASE | CASE construct was used to implement comparison logic |
+| Demux CASE | CASE construct was used to implement output selection |
+| Demux Generate | Generate construct was used to create repeated demultiplexer logic |
 
 ---
 
 # 7. Conclusion
 
-Module 5 provided practical understanding of optimization in synthesis and the effect of different Verilog RTL coding constructs on hardware implementation.
+Module 5 provided practical understanding of RTL coding constructs and their effect on synthesis.
 
-The `if` and `case` experiments demonstrated how conditional statements are interpreted during synthesis. Incomplete assignments and overlapping conditions were studied to understand their effect on the resulting hardware.
+The `if-else` and `case` constructs were studied as methods for describing priority and selection logic. Incomplete assignments were examined to understand how missing conditions can affect the behavior and hardware inferred during synthesis.
 
-The module also covered `for` loops and `for generate` constructs for describing repetitive hardware structures. Practical circuits including a Ripple Carry Adder, multiplexer, comparator and demultiplexer were implemented and verified.
+The module also introduced incomplete and overlapping case conditions and demonstrated the importance of complete and unambiguous RTL coding.
+
+The `for` loop and `for generate` constructs were studied for describing repetitive hardware structures. Practical circuits including a Ripple Carry Adder, multiplexer, comparator and demultiplexer were implemented and verified.
 
 Icarus Verilog was used for simulation, GTKWave was used for waveform analysis, and Yosys was used for synthesis and technology mapping.
 
@@ -284,9 +438,11 @@ The overall flow studied was:
 ```text
 RTL Coding
      ↓
-If / Case / For / Generate Constructs
+IF / CASE / FOR / GENERATE
      ↓
 RTL Simulation
+     ↓
+Waveform Analysis
      ↓
 Synthesis
      ↓
