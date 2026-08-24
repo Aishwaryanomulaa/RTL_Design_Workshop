@@ -7,31 +7,30 @@ The objective of Module 4 was to understand Gate-Level Simulation (GLS), synthes
 The experiments covered:
 
 - Gate-Level Simulation (GLS)
-- GLS concepts and flow using Icarus Verilog
+- GLS concepts and flow
 - Synthesis-simulation mismatch
-- Blocking statements in Verilog
-- Non-blocking statements in Verilog
-- Caveats associated with blocking statements
-- Laboratory experiments on GLS
-- Laboratory experiments on synthesis-simulation mismatch
-- Synthesis-simulation mismatch caused by blocking statements
+- Blocking and non-blocking statements
+- Caveats with blocking statements
+- GLS laboratory experiments
+- Synthesis-simulation mismatch experiments
+- Blocking statement mismatch experiments
 
 ---
 
 ## 📑 Contents
 
-- [1. GLS, Synthesis-Simulation Mismatch and Blocking/Non-Blocking Statements](#1-gls-synthesis-simulation-mismatch-and-blockingnon-blocking-statements)
-- [2. Labs on GLS and Synthesis-Simulation Mismatch](#2-labs-on-gls-and-synthesis-simulation-mismatch)
-- [3. Labs on Synthesis-Simulation Mismatch for Blocking Statements](#3-labs-on-synthesis-simulation-mismatch-for-blocking-statements)
-- [4. Key Concepts](#4-key-concepts)
-- [5. Observations](#5-observations)
-- [6. Conclusion](#6-conclusion)
+- [1. GLS Concepts and Flow](#1-gls-concepts-and-flow)
+- [2. Synthesis-Simulation Mismatch](#2-synthesis-simulation-mismatch)
+- [3. Blocking and Non-Blocking Statements](#3-blocking-and-non-blocking-statements)
+- [4. Caveats with Blocking Statements](#4-caveats-with-blocking-statements)
+- [5. GLS and Synthesis-Simulation Mismatch Lab](#5-gls-and-synthesis-simulation-mismatch-lab)
+- [6. Blocking Statement Mismatch Lab](#6-blocking-statement-mismatch-lab)
+- [7. Observations](#7-observations)
+- [8. Conclusion](#8-conclusion)
 
 ---
 
-# 1. GLS, Synthesis-Simulation Mismatch and Blocking/Non-Blocking Statements
-
-## 1.1 GLS Concepts and Flow Using Icarus Verilog
+# 1. GLS Concepts and Flow
 
 Gate-Level Simulation (GLS) is the process of simulating the synthesized gate-level netlist to verify that the synthesized design behaves as expected.
 
@@ -53,17 +52,13 @@ Verification
 
 GLS helps verify the functionality of the synthesized design and can reveal issues that may not be visible during RTL simulation.
 
-### GLS Concepts and Flow
-
-![GLS Concepts and Flow](images/SKY130RTL_D4SK1_L1_GLSConceptsAndFlowUsingIverilog.svg)
-
 ---
 
-## 1.2 Synthesis-Simulation Mismatch
+# 2. Synthesis-Simulation Mismatch
 
 A synthesis-simulation mismatch occurs when the behavior observed during RTL simulation differs from the behavior of the synthesized circuit.
 
-Such mismatches can occur because of:
+Possible causes include:
 
 - Incorrect RTL coding
 - Improper use of blocking assignments
@@ -71,21 +66,15 @@ Such mismatches can occur because of:
 - Incomplete sensitivity lists
 - Incorrect combinational logic description
 - Simulation-only behavior
-- Differences between RTL and synthesized hardware interpretation
-
-### Synthesis-Simulation Mismatch
-
-![Synthesis-Simulation Mismatch](images/SKY130RTL_D4SK1_L2_SynthesisSimulationMismatch.svg)
-
-The purpose of studying synthesis-simulation mismatch is to understand how RTL coding styles can affect the final hardware implementation.
+- Differences in the interpretation of RTL during synthesis
 
 ---
 
-## 1.3 Blocking and Non-Blocking Statements in Verilog
+# 3. Blocking and Non-Blocking Statements
 
-Verilog provides two commonly used assignment types:
+Verilog provides two commonly used assignment types.
 
-### Blocking Assignment
+## 3.1 Blocking Assignment
 
 Blocking assignments use the `=` operator.
 
@@ -99,7 +88,9 @@ The assignment is executed immediately, and the next statement waits until the a
 
 Blocking assignments are generally used for combinational logic.
 
-### Non-Blocking Assignment
+---
+
+## 3.2 Non-Blocking Assignment
 
 Non-blocking assignments use the `<=` operator.
 
@@ -113,13 +104,9 @@ The assignment is scheduled and updated after the current simulation event.
 
 Non-blocking assignments are generally used for sequential logic such as flip-flops.
 
-### Blocking vs Non-Blocking
-
-![Blocking and Non-Blocking Statements](images/SKY130RTL_D4SK1_L3_BlockingAndNonBlockingStatementsInVerilog.svg)
-
 ---
 
-## 1.4 Caveats with Blocking Statements
+# 4. Caveats with Blocking Statements
 
 Blocking assignments can cause unexpected behavior when they are used incorrectly in sequential logic.
 
@@ -147,182 +134,110 @@ end
 
 causes both assignments to use the values from before the clock event, which more accurately represents flip-flop behavior.
 
-### Caveats with Blocking Statements
+### Blocking Caveat – Synthesized Circuit
 
-![Caveats with Blocking Statements](images/SKY130RTL_D4SK1_L4_CaveatsWithBlockingStatements.svg)
-
----
-
-# 2. Labs on GLS and Synthesis-Simulation Mismatch
-
-The laboratory experiments demonstrated the difference between RTL simulation and gate-level simulation.
-
-The synthesized netlist was simulated to verify the behavior of the design after synthesis.
+![Blocking Caveat Schematic](<images/blocking_ccaveat(schematic).png>)
 
 ---
 
-## 2.1 GLS and Synthesis-Simulation Mismatch – Part 1
+# 5. GLS and Synthesis-Simulation Mismatch Lab
 
-The first laboratory experiment demonstrated GLS and the behavior of the synthesized design.
+The laboratory experiments demonstrated the difference between RTL simulation and synthesized behavior.
 
-### Lab Result
+## 5.1 Ternary Operator MUX – Schematic
 
-![GLS Synth Sim Mismatch Part 1](images/SKY130RTL_D4SK2_L1_Lab_GLS_Synth_Sim_Mismatch_part1.svg)
+The ternary operator was used to describe multiplexer functionality.
 
-The experiment helped in understanding how the synthesized netlist can be simulated and compared with the original RTL behavior.
+### Synthesized Circuit
 
----
+![Ternary Operator MUX Schematic](<images/terenery_operator_mux(schematic)waveform.png>)
 
-## 2.2 GLS and Synthesis-Simulation Mismatch – Part 2
-
-The second laboratory experiment continued the analysis of GLS and synthesis-simulation mismatch.
-
-### Lab Result
-
-![GLS Synth Sim Mismatch Part 2](images/SKY130RTL_D4SK2_L2_Lab_GLS_Synth_Sim_Mismatch_part2.svg)
-
-The comparison between RTL simulation and gate-level simulation helps identify possible differences introduced during synthesis.
+The synthesized result demonstrates the hardware implementation of the multiplexer described using the ternary operator.
 
 ---
 
-# 3. Labs on Synthesis-Simulation Mismatch for Blocking Statements
+## 5.2 Ternary Operator MUX – Testbench Waveform
 
-Blocking assignments were studied to understand how coding style can create differences between simulation and synthesized hardware behavior.
+The design was verified using a testbench and the resulting waveform was observed.
 
----
+### GTKWave Result
 
-## 3.1 Blocking Statement Mismatch – Part 1
+![Ternary Operator MUX Waveform](<images/terenery_operator_mux(tb)waveform.png>)
 
-The first experiment demonstrated synthesis-simulation mismatch caused by the use of blocking statements.
-
-### Lab Result
-
-![Blocking Statement Mismatch Part 1](images/SKY130RTL_D4SK3_L1_Lab_Synth_sim_mismatch_blocking_statement_part1.svg)
-
-The experiment shows why blocking assignments must be used carefully when describing sequential circuits.
+The waveform verifies the functional behavior of the multiplexer for different input and select conditions.
 
 ---
 
-## 3.2 Blocking Statement Mismatch – Part 2
+## 5.3 Ternary Operator MUX – My Library
 
-The second experiment further demonstrated the effect of blocking statements on synthesis and simulation.
+The design was also analyzed using the technology-specific library.
 
-### Lab Result
+### Synthesized Circuit
 
-![Blocking Statement Mismatch Part 2](images/SKY130RTL_D4SK3_L2_Lab_Synth_sim_mismatch_blocking_statement_part2.svg)
+![Ternary Operator MUX My Library Schematic](<images/terenery_operator_mux(schematic)waveform.png>)
 
-The experiment helps illustrate how incorrect assignment styles can result in different simulation and synthesized behavior.
+### Testbench Waveform
 
----
+![Ternary Operator MUX My Library Waveform](<images/terenery_operator_mux(tb)waveform(my_lib).png>)
 
-# 4. Key Concepts
-
-## Gate-Level Simulation
-
-GLS verifies the synthesized gate-level netlist by simulating it using a testbench.
-
-```text
-RTL
- ↓
-Synthesis
- ↓
-Gate-Level Netlist
- ↓
-Simulation
- ↓
-Verification
-```
+The results demonstrate the effect of technology mapping on the synthesized implementation.
 
 ---
 
-## Synthesis-Simulation Mismatch
+# 6. Blocking Statement Mismatch Lab
 
-A synthesis-simulation mismatch occurs when the synthesized circuit does not behave in the same way as expected from RTL simulation.
+Blocking statements were studied to understand how coding style can create differences between simulation and synthesized hardware behavior.
 
-Common causes include:
+## 6.1 Blocking Statement Caveat – Waveform
 
-- Incorrect coding style
-- Blocking assignments in sequential logic
-- Incomplete sensitivity lists
-- Incomplete combinational descriptions
-- Incorrect reset handling
-- RTL constructs that synthesis interprets differently
+The blocking statement design was simulated and the resulting waveform was observed.
 
----
+### GTKWave Result
 
-## Blocking Assignment
+![Blocking Caveat Waveform](<images/tb_blocking_caveat(waveform).png>)
 
-```verilog
-=
-```
-
-Blocking assignments execute immediately.
-
-They are generally preferred for:
-
-```text
-Combinational Logic
-```
-
-Example:
-
-```verilog
-always @(*) begin
-    y = a & b;
-end
-```
+The waveform demonstrates the behavior of the design when blocking assignments are used.
 
 ---
 
-## Non-Blocking Assignment
+## 6.2 Blocking Statement Caveat – My Library
 
-```verilog
-<=
-```
+The same design was analyzed using the technology-specific library.
 
-Non-blocking assignments update signals after the current simulation event.
+### GTKWave Result
 
-They are generally preferred for:
+![Blocking Caveat My Library Waveform](<images/tb_blocking_caveat(waveform)my_lib.png>)
 
-```text
-Sequential Logic
-```
-
-Example:
-
-```verilog
-always @(posedge clk) begin
-    q <= d;
-end
-```
+The result helps demonstrate the relationship between RTL simulation, synthesis and technology mapping.
 
 ---
 
-# 5. Observations
+# 7. Observations
 
 | Experiment | Observation |
 |---|---|
-| GLS concepts | Gate-level simulation verifies the synthesized netlist |
+| GLS | Gate-level simulation verifies the synthesized netlist |
 | Synthesis-simulation mismatch | RTL and synthesized behavior can differ because of coding issues |
 | Blocking assignment | Blocking assignments execute immediately |
 | Non-blocking assignment | Non-blocking assignments model sequential updates |
-| Blocking statement caveats | Incorrect use in sequential logic can cause unexpected simulation behavior |
-| GLS Lab Part 1 | Demonstrated gate-level simulation and mismatch analysis |
-| GLS Lab Part 2 | Further comparison of RTL and synthesized behavior |
-| Blocking mismatch Part 1 | Demonstrated mismatch caused by blocking statements |
-| Blocking mismatch Part 2 | Further demonstrated the effect of blocking assignments |
+| Blocking caveat | Incorrect use in sequential logic can cause unexpected behavior |
+| Ternary operator MUX | The ternary operator can be synthesized into multiplexer logic |
+| MUX waveform | Simulation verifies the functional behavior of the MUX |
+| My library results | Technology mapping changes the gate-level implementation |
+| Blocking waveform | Blocking assignments can produce different simulation behavior |
+| Library waveform | Technology-mapped simulation helps verify the synthesized design |
 
 ---
 
-# 6. Conclusion
+# 8. Conclusion
 
-Module 4 provided practical understanding of Gate-Level Simulation, synthesis-simulation mismatch, and Verilog assignment statements.
+Module 4 provided practical understanding of Gate-Level Simulation, synthesis-simulation mismatch, and blocking and non-blocking assignments in Verilog.
 
-GLS was studied as an important verification step after synthesis. The experiments demonstrated how a synthesized gate-level netlist can be simulated and compared with the original RTL behavior.
+GLS was studied as an important verification step after synthesis. The experiments demonstrated how synthesized designs can be simulated and compared with RTL behavior.
 
-The difference between blocking and non-blocking assignments was also studied. Blocking assignments are generally suitable for combinational logic, while non-blocking assignments are preferred for sequential logic.
+The difference between blocking and non-blocking assignments was also studied. Blocking assignments are generally preferred for combinational logic, while non-blocking assignments are preferred for sequential logic.
 
-The laboratory experiments demonstrated that incorrect RTL coding practices, especially the inappropriate use of blocking assignments in sequential logic, can result in synthesis-simulation mismatches.
+The laboratory experiments demonstrated how the ternary operator can be synthesized into multiplexer logic and how incorrect use of blocking assignments can lead to unexpected simulation behavior.
 
 The overall flow studied was:
 
@@ -342,4 +257,4 @@ Comparison
 Verification
 ```
 
-The diagrams and laboratory results included in this module were obtained from the Module 4 experiments.
+The circuit diagrams and waveform screenshots included in this module were obtained from the Module 4 laboratory experiments.
